@@ -51,6 +51,17 @@ Ensure you have the following installed:
 
 ### Clone the repository
 
+
+### How to use
+1. Enter a character's name in the search bar.
+
+2. Use the filters (homeworld, species, starships) to refine results.
+
+Click on a **View more** to view detailed information in a modal.
+
+![image](https://github.com/user-attachments/assets/a98a5f3d-107f-4211-b8e2-4fba910d1df8)
+
+
 ```sh
 git clone https://github.com/yourusername/star-wars-app.git
 cd star-wars-app
