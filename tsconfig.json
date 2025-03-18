@@ -1,0 +1,27 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "jsx": "react-jsxdev",
+    "strict": true,
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+      "@common/*": ["common/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
