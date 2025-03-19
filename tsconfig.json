@@ -2,6 +2,7 @@
   "files": [],
   "compilerOptions": {
     "jsx": "react-jsxdev",
+    "types": ["node", "jest"],
     "strict": true,
     "target": "ES6",
     "module": "ESNext",
