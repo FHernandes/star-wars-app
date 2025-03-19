@@ -1,4 +1,4 @@
 export default {
-    SWAPI_API: import.meta.env.VITE_SWAPI_API_URL,
-    DATABANK: import.meta.env.VITE_DATABANK,
-}
+  SWAPI_API: process.env.VITE_SWAPI_API_URL,
+  DATABANK: process.env.VITE_DATABANK,
+};

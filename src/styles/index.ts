@@ -51,6 +51,9 @@ export const FilterContainer = styled.div`
   @media ${device.mobile} {
     width: 100%;
     padding: 4px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0;
   }
 `;
 
