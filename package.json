@@ -8,8 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest --watch",
-    "test:ci": "jest --coverage"
+    "test": "vitest --watch",
+    "test:ci": "vitest --coverage"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
@@ -30,7 +30,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@types/styled-components": "^5.1.34",
@@ -38,7 +38,6 @@
     "@typescript-eslint/parser": "^8.26.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
-    "babel-jest": "^29.7.0",
     "dotenv": "^16.4.7",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
@@ -52,26 +51,12 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^26.0.0",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
-    "ts-jest": "^29.2.6",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
-    "vite": "^6.2.0"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "\\.(png|jpg|jpeg|gif|svg)$": "<rootDir>/src/__mocks__/fileMock.ts"
-    }
+    "vite": "^6.2.0",
+    "vitest": "^3.0.9"
   }
 }

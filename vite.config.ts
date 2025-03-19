@@ -15,6 +15,16 @@ export default defineConfig(({ mode }) => {
   );
 
   return {
+    server: {
+      port: 3000,
+      open: false,
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.ts',
+      mockReset: true,
+    },
     plugins: [react()],
     define: envWithProcessPrefix,
   };

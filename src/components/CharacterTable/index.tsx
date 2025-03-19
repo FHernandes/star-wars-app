@@ -44,14 +44,14 @@ const CharacterTable = ({
     setPage(searchPage);
   }, [searchPage]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['getCharacterList', page],
     queryFn: () => getCharacterList(page),
     staleTime: 5 * 60 * 1000, // 5 minutes of cache
     enabled: !filteredCharacters,
   });
 
-  const characterList = filteredCharacters ? filteredCharacters?.results : data?.results;
+  const characterList = filteredCharacters?.results ?? data?.results ?? [];
   const characterCount = filteredCharacters?.count;
 
   const handleChangePage = (isPrevious: boolean) => {
@@ -89,7 +89,16 @@ const CharacterTable = ({
     );
   }
 
-  if (!characterList) {
+  if (filteredCharacters === null || (filteredCharacters && characterCount === 0)) {
+    return (
+      <WarnContainer>
+        <p>No data found!</p>
+        <p>Try another combination, young Padawan.</p>
+      </WarnContainer>
+    );
+  }
+
+  if (isError || !(characterList?.length > 0)) {
     return (
       <WarnContainer>
         <p>Data failed to load!</p>
@@ -99,14 +108,6 @@ const CharacterTable = ({
     );
   }
 
-  if (filteredCharacters === null || (filteredCharacters && characterCount === 0)) {
-    return (
-      <WarnContainer>
-        <p>No data found!</p>
-        <p>Try another combination, young Padawan.</p>
-      </WarnContainer>
-    );
-  }
   return (
     <>
       <TableContainer>

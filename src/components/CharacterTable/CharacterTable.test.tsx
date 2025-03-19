@@ -1,40 +1,101 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import CharacterTable from './index';
+import { getCharacterList } from '../../api/swapi';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const queryClient = new QueryClient();
+// Mocking API
+vi.mock('../../api/swapi', () => ({
+  getCharacterList: vi.fn(),
+}));
 
-describe('Character Modal Tests', () => {
-  test('should open modal and display character details', async () => {
+let queryClient = new QueryClient();
+
+describe('CharacterTable', () => {
+  beforeEach(() => {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('should render correctly with characters', async () => {
+    (getCharacterList as vi.Mock).mockResolvedValue({
+      results: [
+        {
+          name: 'Luke Skywalker',
+          birth_year: '19BBY',
+          films: [
+            'https://swapi.dev/api/films/1/',
+            'https://swapi.dev/api/films/2/',
+            'https://swapi.dev/api/films/3/',
+            'https://swapi.dev/api/films/6/',
+          ],
+          url: 'https://swapi.dev/api/people/1/',
+        },
+      ],
+      next: null,
+      previous: null,
+    });
+
     render(
       <QueryClientProvider client={queryClient}>
         <CharacterTable
-          filteredCharacters={{
-            count: 1,
-            results: [
-              {
-                name: 'Luke Skywalker',
-                url: 'https://swapi.dev/api/people/1/',
-                birth_year: '19BBY',
-                films: [],
-              },
-            ],
-          }}
           isLoadingSearch={false}
           searchPage={1}
-          setSearchPage={jest.fn()}
-          handleSearch={jest.fn()}
+          setSearchPage={vi.fn()}
+          handleSearch={vi.fn()}
         />
       </QueryClientProvider>,
     );
 
-    // Click on "View more" button
-    fireEvent.click(screen.getByText(/view more/i));
-
-    // Wait for modal to appear
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByText(/Luke Skywalker/i)).toBeInTheDocument();
+      expect(screen.getByText(/19BBY/i)).toBeInTheDocument();
+      expect(screen.getByText(/^4$/i)).toBeInTheDocument();
+    });
+  });
+
+  test('should show loading state', async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <CharacterTable
+          isLoadingSearch={true}
+          searchPage={1}
+          setSearchPage={vi.fn()}
+          handleSearch={vi.fn()}
+        />
+      </QueryClientProvider>,
+    );
+
+    expect(screen.getByText(/Loading../i)).toBeInTheDocument();
+  });
+
+  test('should show error message when data fails to load', async () => {
+    (getCharacterList as vi.Mock).mockRejectedValueOnce(new Error('Failed to fetch'));
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <span> test</span>
+        <CharacterTable
+          isLoadingSearch={false}
+          searchPage={1}
+          setSearchPage={vi.fn()}
+          handleSearch={vi.fn()}
+        />
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Data failed to load/i)).toBeInTheDocument();
     });
   });
 });

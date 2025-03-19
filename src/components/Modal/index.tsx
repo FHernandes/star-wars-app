@@ -22,14 +22,12 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, id }: ModalProps) => {
-  if (!isOpen) return null;
-
   const [currentImage, setCurrentImage] = useState(defaultAvatar);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['getCharacter', id],
     queryFn: () => getCharacter(id),
-    staleTime: 5 * 60 * 1000, // 5 minutes of cache
+    staleTime: 5 * 60 * 1000, // 5 minutos de cache
   });
 
   const {
@@ -61,28 +59,34 @@ const Modal = ({ isOpen, onClose, id }: ModalProps) => {
     }
   }, [isPending, characterData]);
 
+  if (!isOpen) return null;
+
   if (isLoading) {
     return (
-      <div>
-        <p>Loading..</p>
-      </div>
+      <Overlay onClick={() => onClose(false)}>
+        <ModalContainer>
+          <p>Loading..</p>
+        </ModalContainer>
+      </Overlay>
     );
   }
 
-  if (!data) {
+  if (isError || !data) {
     return (
-      <div>
-        <p>Data failed to load!</p>
-        <p>Try again later, young Padawan.</p>
-      </div>
+      <Overlay onClick={() => onClose(false)}>
+        <ModalContainer>
+          <p>Data failed to load!</p>
+          <p>Try again later, young Padawan.</p>
+        </ModalContainer>
+      </Overlay>
     );
   }
 
-  const characterHeight = Number(data.height) / 100;
+  const characterHeight = Number(data.height) / 100 || 'unknow';
 
   return (
     <Overlay onClick={() => onClose(false)}>
-      <ModalContainer onClick={(e) => e.stopPropagation()}>
+      <ModalContainer onClick={(e) => e.stopPropagation()} data-testid="character-modal">
         <ModalHeader>
           <h2>{data.name}</h2>
           <CloseButton onClick={() => onClose(false)}>&times;</CloseButton>
